@@ -38,3 +38,13 @@ class ToggleTaskStatusEvent extends ReminderEvent {
   @override
   List<Object?> get props => [task, newEndTime];
 }
+
+class EditTaskEvent extends ReminderEvent {
+  final ReminderModel oldTask;
+  final ReminderModel newTask;
+
+  const EditTaskEvent(this.oldTask, this.newTask);
+
+  @override
+  List<Object?> get props => [oldTask, newTask];
+}

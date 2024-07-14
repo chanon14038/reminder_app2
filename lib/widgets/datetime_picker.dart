@@ -4,8 +4,7 @@ import 'package:intl/intl.dart';
 class DateTimePickerDialog extends StatefulWidget {
   final DateTime initialDate;
 
-  const DateTimePickerDialog({Key? key, required this.initialDate})
-      : super(key: key);
+  const DateTimePickerDialog({super.key, required this.initialDate});
 
   @override
   _DateTimePickerDialogState createState() => _DateTimePickerDialogState();
@@ -22,61 +21,70 @@ class _DateTimePickerDialogState extends State<DateTimePickerDialog> {
     _selectedTime = TimeOfDay.fromDateTime(widget.initialDate);
   }
 
-  Future<void> _selectDateTime(BuildContext context) async {
+  Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime.now().subtract(Duration(days: 1)),
+      firstDate: DateTime.now().subtract(const Duration(days: 1)),
       lastDate: DateTime(2101),
     );
     if (pickedDate != null) {
-      final TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime: _selectedTime ?? TimeOfDay.now(),
-      );
-      if (pickedTime != null) {
-        setState(() {
-          _selectedDate = DateTime(
-            pickedDate.year,
-            pickedDate.month,
-            pickedDate.day,
-            pickedTime.hour,
-            pickedTime.minute,
-          );
-          _selectedTime = pickedTime;
-        });
-      }
-    } //else {
-    // setState(() {
-    //   _selectedTime = null;
-    // });
-    // }
+      setState(() {
+        _selectedDate = pickedDate;
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime ?? TimeOfDay.now(),
+    );
+    if (pickedTime != null) {
+      setState(() {
+        _selectedTime = pickedTime;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Select Date and Time'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ListTile(
-            title: Text(
-                'Date: ${DateFormat('yyyy-MM-dd').format(_selectedDate!)}\nTime: ${DateFormat('HH:mm:ss').format(_selectedDate!)}'),
-            trailing: Icon(Icons.calendar_today),
-            onTap: () => _selectDateTime(context),
-          ),
-        ],
+      title: const Text('Select Date and Time'),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              title: Text(
+                _selectedDate != null
+                    ? 'Date: ${DateFormat('yyyy-MM-dd').format(_selectedDate!)}'
+                    : 'Select Date',
+              ),
+              trailing: const Icon(Icons.calendar_today),
+              onTap: () => _selectDate(context),
+            ),
+            ListTile(
+              title: Text(
+                _selectedTime != null
+                    ? 'Time: ${_selectedTime!.format(context)}'
+                    : 'Select Time',
+              ),
+              trailing: const Icon(Icons.access_time),
+              onTap: () => _selectTime(context),
+            ),
+          ],
+        ),
       ),
       actions: <Widget>[
         TextButton(
-          child: Text('CANCEL'),
+          child: const Text('CANCEL'),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text('OK'),
+          child: const Text('OK'),
           onPressed: () {
             if (_selectedDate != null && _selectedTime != null) {
               final DateTime finalDateTime = DateTime(

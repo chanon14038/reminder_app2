@@ -4,10 +4,11 @@ import 'package:reminder_app2/bloc/state.dart';
 import 'package:reminder_app2/models/export_model.dart';
 
 class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
-  ReminderBloc() : super(ReminderState([])) {
+  ReminderBloc() : super(const ReminderState([])) {
     on<AddTaskEvent>(_onAddTask);
     on<DeleteTaskEvent>(_onDeleteTask);
     on<ToggleTaskStatusEvent>(_onToggleTaskStatus);
+    on<EditTaskEvent>(_onEditTask);
   }
 
   void _onAddTask(AddTaskEvent event, Emitter<ReminderState> emit) {
@@ -36,6 +37,16 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
           doneTime: isDone ? DateTime.now() : null,
           endtime: isDone ? task.endtime : event.newEndTime,
         );
+      }
+      return task;
+    }).toList();
+    emit(ReminderState(updatedModels));
+  }
+
+  void _onEditTask(EditTaskEvent event, Emitter<ReminderState> emit) {
+    final updatedModels = state.reminderModels.map((task) {
+      if (task == event.oldTask) {
+        return event.newTask;
       }
       return task;
     }).toList();

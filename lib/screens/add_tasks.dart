@@ -3,6 +3,8 @@ import 'package:reminder_app2/models/export_model.dart';
 import 'package:reminder_app2/widgets/datetime_picker.dart';
 
 class AddTaskPage extends StatefulWidget {
+  const AddTaskPage({super.key});
+
   @override
   _AddTaskPageState createState() => _AddTaskPageState();
 }
@@ -16,7 +18,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Add New Task')),
+      appBar: AppBar(title: const Text('Add New Task')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -24,7 +26,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           child: Column(
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(labelText: 'Task'),
+                decoration: const InputDecoration(labelText: 'Task'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a task';
@@ -36,7 +38,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Detail'),
+                decoration: const InputDecoration(labelText: 'Detail'),
                 validator: (value) {
                   return null;
                 },
@@ -44,9 +46,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   _details = value;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField(
-                decoration: InputDecoration(labelText: 'End Time'),
+                decoration: const InputDecoration(labelText: 'End Time'),
                 readOnly: true,
                 onTap: () async {
                   DateTime? pickedDateTime = await showDialog<DateTime>(
@@ -69,7 +71,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       : '',
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -78,7 +80,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         tasks: _task!, details: _details!, endtime: _endtime));
                   }
                 },
-                child: Text('Add Task'),
+                child: const Text('Add Task'),
               ),
             ],
           ),
