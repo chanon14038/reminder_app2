@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:reminder_app2/bloc/export_bloc.dart';
 import 'package:reminder_app2/screens/add_tasks.dart';
 
@@ -14,6 +15,8 @@ class TaskPage extends StatelessWidget {
           final notDoneTasks = state.reminderModels
               .where((task) => !task.isDone && !task.isLate)
               .toList();
+              final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+              final DateFormat timeFormat = DateFormat('HH:mm:ss');
 
           return ListView.builder(
             itemCount: notDoneTasks.length,
@@ -22,7 +25,7 @@ class TaskPage extends StatelessWidget {
               return ListTile(
                 title: Text(task.tasks),
                 subtitle: Text(
-                    '\t${task.details}\n${task.endtime?.toString() ?? 'No deadline'}'),
+                    'Details: ${task.details}\nEnd Time: ${task.endtime != null ? "${dateFormat.format(task.endtime!)} ${timeFormat.format(task.endtime!)}" : 'No deadline'}'),
                 trailing: Checkbox(
                   value: task.isDone,
                   onChanged: (value) {

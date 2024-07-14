@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DateTimePickerDialog extends StatefulWidget {
   final DateTime initialDate;
@@ -11,8 +12,8 @@ class DateTimePickerDialog extends StatefulWidget {
 }
 
 class _DateTimePickerDialogState extends State<DateTimePickerDialog> {
-  late DateTime _selectedDate;
-  late TimeOfDay _selectedTime;
+  DateTime? _selectedDate;
+  TimeOfDay? _selectedTime;
 
   @override
   void initState() {
@@ -24,14 +25,14 @@ class _DateTimePickerDialogState extends State<DateTimePickerDialog> {
   Future<void> _selectDateTime(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: _selectedDate,
+      initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime.now().subtract(Duration(days: 1)),
       lastDate: DateTime(2101),
     );
     if (pickedDate != null) {
       final TimeOfDay? pickedTime = await showTimePicker(
         context: context,
-        initialTime: _selectedTime,
+        initialTime: _selectedTime ?? TimeOfDay.now(),
       );
       if (pickedTime != null) {
         setState(() {
@@ -45,7 +46,11 @@ class _DateTimePickerDialogState extends State<DateTimePickerDialog> {
           _selectedTime = pickedTime;
         });
       }
-    }
+    } //else {
+    // setState(() {
+    //   _selectedTime = null;
+    // });
+    // }
   }
 
   @override
@@ -56,13 +61,9 @@ class _DateTimePickerDialogState extends State<DateTimePickerDialog> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
-            title: Text("Date: ${_selectedDate.toLocal()}".split(' ')[0]),
+            title: Text(
+                'Date: ${DateFormat('yyyy-MM-dd').format(_selectedDate!)}\nTime: ${DateFormat('HH:mm:ss').format(_selectedDate!)}'),
             trailing: Icon(Icons.calendar_today),
-            onTap: () => _selectDateTime(context),
-          ),
-          ListTile(
-            title: Text("Time: ${_selectedTime.format(context)}"),
-            trailing: Icon(Icons.access_time),
             onTap: () => _selectDateTime(context),
           ),
         ],
@@ -77,7 +78,19 @@ class _DateTimePickerDialogState extends State<DateTimePickerDialog> {
         TextButton(
           child: Text('OK'),
           onPressed: () {
-            Navigator.of(context).pop(_selectedDate);
+            if (_selectedDate != null && _selectedTime != null) {
+              final DateTime finalDateTime = DateTime(
+                _selectedDate!.year,
+                _selectedDate!.month,
+                _selectedDate!.day,
+                _selectedTime!.hour,
+                _selectedTime!.minute,
+              );
+              Navigator.of(context).pop(finalDateTime);
+            } else {
+              // Handle the case where date or time is not selected
+              // Show a message or keep the dialog open
+            }
           },
         ),
       ],

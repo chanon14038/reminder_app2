@@ -13,18 +13,18 @@ class DonePage extends StatelessWidget {
         builder: (context, state) {
           final doneTasks =
               state.reminderModels.where((task) => task.isDone).toList();
+          final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+          final DateFormat timeFormat = DateFormat('HH:mm:ss');
 
           return ListView.builder(
             itemCount: doneTasks.length,
             itemBuilder: (context, index) {
               final task = doneTasks[index];
-              final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
-              final DateFormat timeFormat = DateFormat('HH:mm:ss');
 
               return ListTile(
                 title: Text(task.tasks),
                 subtitle: Text(
-                  'Details: ${task.details}\nEnd Time: ${task.endtime != null ? "${dateFormat.format(task.endtime!)} ${timeFormat.format(task.endtime!)}" : 'No deadline'}\nDone Time: ${task.doneTime != null ? timeFormat.format(task.doneTime!) : 'Not done yet'}',
+                  'Details: ${task.details}\nEnd Time: ${task.endtime != null ? "${dateFormat.format(task.endtime!)} ${timeFormat.format(task.endtime!)}" : 'No deadline'}\nDone Time: ${task.doneTime != null ? "${dateFormat.format(task.doneTime!)} ${timeFormat.format(task.doneTime!)}" : 'Not done yet'}',
                 ),
                 trailing: Checkbox(
                   value: task.isDone,
