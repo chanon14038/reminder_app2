@@ -1,30 +1,40 @@
-import 'package:reminder_app2/models/model.dart';
+import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
+import 'package:reminder_app2/models/export_model.dart';
 
-sealed class ReminderEvent {}
+
+@immutable
+abstract class ReminderEvent extends Equatable {
+  const ReminderEvent();
+
+  @override
+  List<Object?> get props => [];
+}
 
 class AddTaskEvent extends ReminderEvent {
   final ReminderModel newTask;
 
-  AddTaskEvent(this.newTask);
+  const AddTaskEvent(this.newTask);
 
-}
-
-class CompleteTaskEvent extends ReminderEvent {
-  final ReminderModel task;
-
-  CompleteTaskEvent(this.task);
+  @override
+  List<Object?> get props => [newTask];
 }
 
 class DeleteTaskEvent extends ReminderEvent {
   final ReminderModel task;
 
-  DeleteTaskEvent(this.task);
+  const DeleteTaskEvent(this.task);
+
+  @override
+  List<Object?> get props => [task];
 }
 
+class ToggleTaskStatusEvent extends ReminderEvent {
+  final ReminderModel task;
+  final DateTime? newEndTime;
 
-class ReleaseTaskEvent extends ReminderEvent {
-  final ReleaseTaskEvent task;
+  const ToggleTaskStatusEvent(this.task, {this.newEndTime});
 
-  ReleaseTaskEvent(this.task);
-  List<Object> get props => [task];
+  @override
+  List<Object?> get props => [task, newEndTime];
 }

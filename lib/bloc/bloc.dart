@@ -6,9 +6,8 @@ import 'package:reminder_app2/models/export_model.dart';
 class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
   ReminderBloc() : super(ReminderState([])) {
     on<AddTaskEvent>(_onAddTask);
-    on<CompleteTaskEvent>(_onCompleteTask);
     on<DeleteTaskEvent>(_onDeleteTask);
-    on<ReleaseTaskEvent>(_onReleaseTask);
+    on<ToggleTaskStatusEvent>(_onToggleTaskStatus);
   }
 
   void _onAddTask(AddTaskEvent event, Emitter<ReminderState> emit) {
@@ -17,18 +16,29 @@ class ReminderBloc extends Bloc<ReminderEvent, ReminderState> {
     emit(ReminderState(updatedModels));
   }
 
-  void _onCompleteTask(event, emit) {
-    final updatedModels = state.reminderModels.map((task) {
-      return task == event.task ? task.copyWith(isDone: true) : task;
-    }).toList();
-    emit(ReminderState(updatedModels));
-  }
-
-  void _onDeleteTask(event, emit) {
+  void _onDeleteTask(DeleteTaskEvent event, Emitter<ReminderState> emit) {
     final updatedModels =
         state.reminderModels.where((task) => task != event.task).toList();
     emit(ReminderState(updatedModels));
   }
 
-  void _onReleaseTask(even,  emit){}
+  void _onToggleTaskStatus(
+      ToggleTaskStatusEvent event, Emitter<ReminderState> emit) {
+    final updatedModels = state.reminderModels.map((task) {
+      if (task == event.task) {
+        final isDone = !task.isDone;
+        return task.copyWith(
+          //
+          // isDone: !task.isDone,
+          // endtime: event.newEndTime ?? task.endtime,
+          //
+          isDone: isDone,
+          doneTime: isDone ? DateTime.now() : null,
+          endtime: isDone ? task.endtime : event.newEndTime,
+        );
+      }
+      return task;
+    }).toList();
+    emit(ReminderState(updatedModels));
+  }
 }

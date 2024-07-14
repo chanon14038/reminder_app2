@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:reminder_app2/screens/export_screen.dart';
 
-class HomePage extends StatefulWidget {
+class MainScreen extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _MainScreenState createState() => _MainScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   static List<Widget> _pages = <Widget>[

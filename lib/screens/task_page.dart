@@ -10,7 +10,7 @@ class TaskPage extends StatelessWidget {
       appBar: AppBar(title: Text('Your Tasks')),
       body: BlocBuilder<ReminderBloc, ReminderState>(
         builder: (context, state) {
-          // Filter tasks that are not done
+          // Filter tasks that are not done and not late
           final notDoneTasks = state.reminderModels
               .where((task) => !task.isDone && !task.isLate)
               .toList();
@@ -26,7 +26,9 @@ class TaskPage extends StatelessWidget {
                 trailing: Checkbox(
                   value: task.isDone,
                   onChanged: (value) {
-                    context.read<ReminderBloc>().add(CompleteTaskEvent(task));
+                    context
+                        .read<ReminderBloc>()
+                        .add(ToggleTaskStatusEvent(task));
                   },
                 ),
               );

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:reminder_app2/models/model.dart';
+import 'package:reminder_app2/models/export_model.dart';
 
 class ReminderState extends Equatable {
   final List<ReminderModel> reminderModels;

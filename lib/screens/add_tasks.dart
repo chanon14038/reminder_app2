@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reminder_app2/models/export_model.dart';
+import 'package:reminder_app2/widgets/datetime_picker.dart';
 
 class AddTaskPage extends StatefulWidget {
   @override
@@ -48,15 +49,17 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 decoration: InputDecoration(labelText: 'End Time'),
                 readOnly: true,
                 onTap: () async {
-                  DateTime? picked = await showDatePicker(
+                  DateTime? pickedDateTime = await showDialog<DateTime>(
                     context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2101),
+                    builder: (BuildContext context) {
+                      return DateTimePickerDialog(
+                        initialDate: _endtime ?? DateTime.now(),
+                      );
+                    },
                   );
-                  if (picked != null) {
+                  if (pickedDateTime != null) {
                     setState(() {
-                      _endtime = picked;
+                      _endtime = pickedDateTime;
                     });
                   }
                 },

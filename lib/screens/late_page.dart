@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reminder_app2/bloc/export_bloc.dart';
+import 'package:reminder_app2/widgets/datetime_picker.dart';
 
 class LatePage extends StatelessWidget {
   @override
@@ -23,8 +24,27 @@ class LatePage extends StatelessWidget {
                     '\t${task.details}\n${task.endtime?.toString() ?? 'No deadline'}'),
                 trailing: Checkbox(
                   value: task.isDone,
-                  onChanged: (value) {
-                    context.read<ReminderBloc>().add(CompleteTaskEvent(task));
+                  onChanged: (value) async {
+                    if (value == false) {
+                      // Show dialog to pick a new end date and time
+                      final DateTime? newEndTime = await showDialog<DateTime>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return DateTimePickerDialog(
+                            initialDate: task.endtime ?? DateTime.now(),
+                          );
+                        },
+                      );
+                      if (newEndTime != null) {
+                        context.read<ReminderBloc>().add(ToggleTaskStatusEvent(
+                            task,
+                            newEndTime: newEndTime));
+                      }
+                    } else {
+                      context
+                          .read<ReminderBloc>()
+                          .add(ToggleTaskStatusEvent(task));
+                    }
                   },
                 ),
               );
