@@ -9,13 +9,17 @@ class DonePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Done Tasks')),
+      appBar: AppBar(
+        title: const Text('Done Tasks'),
+        backgroundColor: Colors.green,
+      ),
       body: BlocBuilder<ReminderBloc, ReminderState>(
         builder: (context, state) {
           final doneTasks =
               state.reminderModels.where((task) => task.isDone).toList();
 
-          return ListTask(tasks: doneTasks);
+          return ListTask(
+              tasks: doneTasks);
         },
       ),
     );

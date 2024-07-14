@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:reminder_app2/models/export_model.dart';
 import 'package:reminder_app2/widgets/datetime_picker.dart';
 
@@ -18,15 +19,25 @@ class _AddTaskPageState extends State<AddTaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add New Task')),
+      appBar: AppBar(
+        title: const Text('Add New Task'),
+        backgroundColor: Colors.blue,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Task'),
+                decoration: const InputDecoration(
+                  labelText: 'Task',
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                  ),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a task';
@@ -37,18 +48,28 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   _task = value;
                 },
               ),
+              const SizedBox(height: 12),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Detail'),
-                validator: (value) {
-                  return null;
-                },
+                decoration: const InputDecoration(
+                  labelText: 'Detail',
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                  ),
+                ),
                 onSaved: (value) {
                   _details = value;
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'End Time'),
+                decoration: const InputDecoration(
+                  labelText: 'End Time',
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                  ),
+                ),
                 readOnly: true,
                 onTap: () async {
                   DateTime? pickedDateTime = await showDialog<DateTime>(
@@ -67,7 +88,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 },
                 controller: TextEditingController(
                   text: _endtime != null
-                      ? _endtime!.toLocal().toString().split(' ')[0]
+                      ? '${DateFormat('yyyy-MM-dd').format(_endtime!)} ${DateFormat('HH:mm:ss').format(_endtime!)}'
                       : '',
                 ),
               ),
@@ -77,9 +98,19 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     Navigator.of(context).pop(ReminderModel(
-                        tasks: _task!, details: _details!, endtime: _endtime));
+                      tasks: _task!,
+                      details: _details!,
+                      endtime: _endtime,
+                    ));
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  padding: const EdgeInsets.all(16.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
                 child: const Text('Add Task'),
               ),
             ],

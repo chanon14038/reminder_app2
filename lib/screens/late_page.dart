@@ -9,13 +9,17 @@ class LatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Late Task')),
+      appBar: AppBar(
+        title: const Text('Late Tasks'),
+        backgroundColor: Colors.redAccent,
+      ),
       body: BlocBuilder<ReminderBloc, ReminderState>(
         builder: (context, state) {
           final lateTasks =
               state.reminderModels.where((task) => task.isLate).toList();
 
-          return ListTask(tasks: lateTasks);
+          return ListTask(
+              tasks: lateTasks);
         },
       ),
     );

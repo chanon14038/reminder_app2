@@ -27,6 +27,19 @@ class _DateTimePickerDialogState extends State<DateTimePickerDialog> {
       initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime.now().subtract(const Duration(days: 1)),
       lastDate: DateTime(2101),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.blue, 
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (pickedDate != null) {
       setState(() {
@@ -39,6 +52,19 @@ class _DateTimePickerDialogState extends State<DateTimePickerDialog> {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: _selectedTime ?? TimeOfDay.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.blue,
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (pickedTime != null) {
       setState(() {
@@ -50,7 +76,13 @@ class _DateTimePickerDialogState extends State<DateTimePickerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Select Date and Time'),
+      title: const Text(
+        'Select Date and Time',
+        style: TextStyle(
+          color: Colors.blue,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -95,10 +127,7 @@ class _DateTimePickerDialogState extends State<DateTimePickerDialog> {
                 _selectedTime!.minute,
               );
               Navigator.of(context).pop(finalDateTime);
-            } else {
-              // Handle the case where date or time is not selected
-              // Show a message or keep the dialog open
-            }
+            } else {}
           },
         ),
       ],

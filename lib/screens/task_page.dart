@@ -10,7 +10,12 @@ class TaskPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Your Tasks')),
+      backgroundColor: Colors.grey[200], 
+      appBar: AppBar(
+        backgroundColor: Colors.blue, 
+        title: const Text('Your Tasks',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+      ),
       body: BlocBuilder<ReminderBloc, ReminderState>(
         builder: (context, state) {
           final notDoneTasks = state.reminderModels
@@ -31,8 +36,11 @@ class TaskPage extends StatelessWidget {
             context.read<ReminderBloc>().add(AddTaskEvent(newTask));
           }
         },
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.blue,
+        child: const Icon(Icons.add), 
       ),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.endFloat, 
     );
   }
 }

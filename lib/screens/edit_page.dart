@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder_app2/models/export_model.dart';
-import 'package:reminder_app2/widgets/datetime_picker.dart';
 
 class EditTaskPage extends StatefulWidget {
   final ReminderModel task;
@@ -61,41 +60,48 @@ class _EditTaskPageState extends State<EditTaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Task')),
+      appBar: AppBar(
+        title: const Text('Edit Task'),
+        backgroundColor: Colors.orangeAccent,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
               controller: _taskController,
-              decoration: const InputDecoration(labelText: 'Task'),
+              decoration: const InputDecoration(
+                labelText: 'Task',
+                border: OutlineInputBorder(),
+              ),
             ),
+            const SizedBox(height: 16),
             TextFormField(
               controller: _detailsController,
-              decoration: const InputDecoration(labelText: 'Details'),
+              decoration: const InputDecoration(
+                labelText: 'Details',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 3,
             ),
-            TextFormField(
-              decoration: const InputDecoration(labelText: 'End Time'),
-              readOnly: true,
-              onTap: () async {
-                DateTime? pickedDateTime = await showDialog<DateTime>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return DateTimePickerDialog(
-                      initialDate: _endtime ?? DateTime.now(),
-                    );
-                  },
-                );
-                if (pickedDateTime != null) {
-                  setState(() {
-                    _endtime = pickedDateTime;
-                  });
-                }
-              },
-              controller: TextEditingController(
-                text: _endtime != null
-                    ? DateFormat('yyyy-MM-dd HH:mm').format(_endtime!)
-                    : '',
+            const SizedBox(height: 16),
+            GestureDetector(
+              onTap: () => _selectEndTime(context),
+              child: AbsorbPointer(
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'End Time',
+                    border: OutlineInputBorder(),
+                    suffixIcon: Icon(Icons.calendar_today),
+                  ),
+                  readOnly: true,
+                  controller: TextEditingController(
+                    text: _endtime != null
+                        ? DateFormat('yyyy-MM-dd HH:mm').format(_endtime!)
+                        : '',
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 20),
