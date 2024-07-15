@@ -1,10 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:reminder_app2/models/export_model.dart';
 
-
-@immutable
-abstract class ReminderEvent extends Equatable {
+sealed class ReminderEvent extends Equatable {
   const ReminderEvent();
 
   @override
